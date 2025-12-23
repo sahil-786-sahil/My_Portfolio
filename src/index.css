@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Set default background so there is no white flash */
+body {
+  background-color: #111827;
+  margin: 0;
+}
