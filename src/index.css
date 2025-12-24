@@ -2,8 +2,331 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Set default background so there is no white flash */
-body {
-  background-color: #111827;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7c3aed;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9333ea;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-fadeInDown {
+  animation: fadeInDown 0.6s ease-out;
+}
+
+.animate-fadeInLeft {
+  animation: fadeInLeft 0.6s ease-out;
+}
+
+.animate-fadeInRight {
+  animation: fadeInRight 0.6s ease-out;
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.animation-delay-800 {
+  animation-delay: 0.8s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent;
+}
+
+/* Custom button styles */
+.btn-primary {
+  @apply bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-full font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-purple-500/50;
+}
+
+.btn-secondary {
+  @apply bg-transparent border-2 border-purple-600 hover:bg-purple-600 px-8 py-3 rounded-full font-semibold transition-all;
+}
+
+/* Card styles */
+.card {
+  @apply bg-slate-800 rounded-2xl p-6 border border-slate-700 hover:border-purple-500 transition-all duration-300;
+}
+
+/* Glow effect */
+.glow-purple {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+}
+
+/* Loading animation */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Shimmer effect */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Section padding */
+.section-padding {
+  @apply py-20 px-4;
+}
+
+/* Container */
+.container-custom {
+  @apply max-w-7xl mx-auto px-4;
+}
+
+/* Focus visible styles for accessibility */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-purple-500;
+}
+
+/* Image optimization */
+img {
+  @apply max-w-full h-auto;
+}
+
+/* Remove default margins */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-slate-900 text-white;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Selection color */
+::selection {
+  @apply bg-purple-600 text-white;
+}
+
+/* Responsive typography */
+@layer base {
+  h1 {
+    @apply text-4xl md:text-6xl font-bold;
+  }
+  h2 {
+    @apply text-3xl md:text-5xl font-bold;
+  }
+  h3 {
+    @apply text-2xl md:text-3xl font-bold;
+  }
+  h4 {
+    @apply text-xl md:text-2xl font-semibold;
+  }
+}
+
+/* Utility classes */
+.text-gradient-purple-pink {
+  @apply bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent;
+}
+
+.text-gradient-blue-cyan {
+  @apply bg-gradient-to-r from-blue-400 to-cyan-600 bg-clip-text text-transparent;
+}
+
+.text-gradient-green-emerald {
+  @apply bg-gradient-to-r from-green-400 to-emerald-600 bg-clip-text text-transparent;
+}
+
+.text-gradient-yellow-orange {
+  @apply bg-gradient-to-r from-yellow-400 to-orange-600 bg-clip-text text-transparent;
+}
+
+/* Grid patterns for backgrounds */
+.grid-pattern {
+  background-image: 
+    linear-gradient(rgba(168, 85, 247, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Glassmorphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Hover effects */
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-2;
+}
+
+/* Smooth page transitions */
+.page-transition {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* Code block styling */
+code {
+  @apply bg-slate-800 px-2 py-1 rounded text-purple-400;
+}
+
+/* Link hover effect */
+a {
+  @apply transition-colors duration-300;
+}
+
+/* Button hover scale */
+button {
+  @apply transition-all duration-300;
+}
+
+/* Responsive video embed */
+.video-responsive {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+}
+
+.video-responsive iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
