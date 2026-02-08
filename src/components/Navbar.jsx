@@ -4,14 +4,25 @@ import { Menu, X } from 'lucide-react';
 const Navbar = ({ activeSection, setActiveSection }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
 
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const navLinks = [
@@ -29,64 +40,57 @@ const Navbar = ({ activeSection, setActiveSection }) => {
   };
 
   return (
-    <nav 
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-slate-900/95 backdrop-blur-sm shadow-lg shadow-purple-500/10' 
-          : 'bg-slate-900/90 backdrop-blur-sm'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+    <nav style={{
+      ...styles.nav,
+      ...(scrolled ? styles.navScrolled : {}),
+    }}>
+      <div style={styles.container}>
+        <div style={styles.innerContainer}>
           <button
             onClick={() => handleNavClick('home')}
-            className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent hover:scale-105 transition-transform"
+            style={styles.logo}
+            className="nav-logo"
           >
-            Sahil Khan
+            <span style={styles.logoText}>Sahil Khan</span>
           </button>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
+          <div style={isMobile ? styles.desktopNavHidden : styles.desktopNav}>
             {navLinks.map((link) => (
               <button
                 key={link.id}
                 onClick={() => handleNavClick(link.id)}
-                className={`relative transition-colors font-medium ${
-                  activeSection === link.id
-                    ? 'text-purple-400'
-                    : 'text-gray-300 hover:text-purple-400'
-                }`}
+                style={{
+                  ...styles.navLink,
+                  ...(activeSection === link.id ? styles.navLinkActive : {}),
+                }}
+                className="nav-link"
               >
                 {link.name}
-                {activeSection === link.id && (
-                  <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-purple-400 to-pink-600"></span>
-                )}
               </button>
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white hover:text-purple-400 transition-colors"
+            style={isMobile ? {...styles.menuButton, ...styles.menuButtonVisible} : styles.menuButton}
+            className="menu-btn"
           >
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden bg-slate-900 border-t border-slate-800 animate-fadeInDown">
-            <div className="px-2 pt-2 pb-3 space-y-1">
+          <div style={styles.mobileNav}>
+            <div style={styles.mobileNavInner}>
               {navLinks.map((link) => (
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`block w-full text-left px-3 py-2 rounded-md transition-all ${
-                    activeSection === link.id
-                      ? 'text-purple-400 bg-slate-800 transform scale-105'
-                      : 'text-gray-300 hover:text-purple-400 hover:bg-slate-800'
-                  }`}
+                  style={{
+                    ...styles.mobileNavLink,
+                    ...(activeSection === link.id ? styles.mobileNavLinkActive : {}),
+                  }}
+                  className="mobile-nav-link"
                 >
                   {link.name}
                 </button>
@@ -95,8 +99,148 @@ const Navbar = ({ activeSection, setActiveSection }) => {
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        .nav-logo:hover {
+          transform: scale(1.05);
+          text-shadow: 0 0 20px rgba(251, 191, 36, 0.8);
+        }
+        
+        .nav-link:hover {
+          color: #5eead4;
+          box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+          border: 2px solid rgba(251, 191, 36, 0.5);
+        }
+        
+        .menu-btn:hover {
+          background: rgba(94, 234, 212, 0.2);
+          box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+        }
+        
+        .mobile-nav-link:hover {
+          color: #fbbf24;
+          background: rgba(251, 191, 36, 0.1);
+          border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+      `}</style>
     </nav>
   );
 };
+
+const styles = {
+  nav: {
+    position: 'fixed',
+    width: '100%',
+    zIndex: 50,
+    transition: 'all 0.5s',
+    background: 'rgba(2, 6, 23, 0.8)',
+    backdropFilter: 'blur(10px)',
+  },
+  navScrolled: {
+    background: 'rgba(2, 6, 23, 0.95)',
+    boxShadow: '0 4px 20px rgba(20, 184, 166, 0.15)',
+    borderBottom: '1px solid rgba(94, 234, 212, 0.2)',
+  },
+  container: {
+    maxWidth: '1280px',
+    margin: '0 auto',
+    padding: '0 1rem',
+  },
+  innerContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '64px',
+  },
+  logo: {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    transition: 'transform 0.3s',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    padding: '0.5rem',
+  },
+  logoText: {
+    background: 'linear-gradient(to right, #60a5fa, #5eead4, #67e8f9)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+  },
+  desktopNav: {
+    display: 'flex',
+    gap: '2rem',
+  },
+  desktopNavHidden: {
+    display: 'none',
+  },
+  navLink: {
+    position: 'relative',
+    transition: 'all 0.3s',
+    fontWeight: '500',
+    background: 'none',
+    border: '2px solid transparent',
+    cursor: 'pointer',
+    color: '#d1d5db',
+    padding: '0.5rem 1rem',
+    borderRadius: '0.5rem',
+    fontSize: '1rem',
+  },
+  navLinkActive: {
+    color: '#5eead4',
+    background: 'rgba(94, 234, 212, 0.1)',
+    borderColor: 'rgba(94, 234, 212, 0.3)',
+  },
+  menuButton: {
+    display: 'none',
+    color: 'white',
+    transition: 'all 0.3s',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    padding: '0.5rem',
+    borderRadius: '0.5rem',
+  },
+  menuButtonVisible: {
+    display: 'block',
+  },
+  mobileNav: {
+    background: 'rgba(15, 23, 42, 0.95)',
+    backdropFilter: 'blur(10px)',
+    borderTop: '1px solid rgba(94, 234, 212, 0.2)',
+  },
+  mobileNavInner: {
+    padding: '0.5rem',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.25rem',
+  },
+  mobileNavLink: {
+    width: '100%',
+    textAlign: 'left',
+    padding: '0.75rem 1rem',
+    borderRadius: '0.5rem',
+    transition: 'all 0.3s',
+    background: 'none',
+    border: '1px solid transparent',
+    cursor: 'pointer',
+    color: '#d1d5db',
+    fontSize: '1rem',
+  },
+  mobileNavLinkActive: {
+    color: '#5eead4',
+    background: 'rgba(94, 234, 212, 0.2)',
+    border: '1px solid rgba(94, 234, 212, 0.3)',
+  },
+};
+
+// Add media query support
+if (typeof window !== 'undefined') {
+  const mediaQuery = window.matchMedia('(max-width: 768px)');
+  if (mediaQuery.matches) {
+    styles.desktopNav.display = 'none';
+    styles.menuButton.display = 'block';
+  }
+}
 
 export default Navbar;
